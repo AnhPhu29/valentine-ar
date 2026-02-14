@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Kỷ Niệm Của Chúng Mình - AR</title>
+    
+    <!-- A-Frame Library -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    
+    <!-- Mind-AR.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        #scene {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ar-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            pointer-events: auto;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: auto;
+        }
+        
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #ff1744, #ff5252);
+            color: white;
+        }
+        
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 23, 68, 0.4);
+        }
+        
+        .start-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .info-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            font-size: 12px;
+            padding: 8px 15px;
+        }
+        
+        .info-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            pointer-events: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+        
+        .modal-content h2 {
+            color: #ff1744;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content p {
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+        
+        .close-btn {
+            width: 100%;
+            background: #ff1744;
+            color: white;
+            margin-top: 20px;
+        }
+        
+        .status {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            button {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+        
+        .heart-model {
+            scale: 0.5 0.5 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="ar-container">
+        <!-- A-Frame Scene with Mind-AR -->
+        <a-scene 
+            id="scene"
+            mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/examples/image-tracking/assets/band-example/band.mind; maxTrack: 10; warmupCount: 8; uiLoading: 'yes'"
+            color-space="sRGB"
+            renderer="colorManagement: true, physicallyCorrectLights"
+            vr-mode-ui="enabled: false"
+            device-orientation-permission-ui="enabled: false">
+            
+            <!-- Camera and Lighting -->
+            <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+            <a-light type="ambient" intensity="1"></a-light>
+            <a-light type="directional" intensity="0.8" position="5 10 7"></a-light>
+            
+            <!-- Target Image Anchor -->
+            <a-entity mindar-image-target="targetIndex: 0">
+                
+                <!-- Video Overlay -->
+                <a-video 
+                    id="memory-video"
+                    src="#memoryVideoAsset"
+                    width="1.6"
+                    height="0.9"
+                    position="0 0 0.1"
+                    rotation="0 0 0"
+                    geometry="primitive: plane"
+                    material="emissive: #fff;">
+                </a-video>
+                
+                <!-- Heart Particle System 1 -->
+                <a-entity 
+                    id="heart1"
+                    position="-0.6 0.5 0.2"
+                    animation="property: position; to: -0.6 1.2 0.2; dur: 3000; loop: true; easing: easeInOutQuad"
+                    animation__rotation="property: rotation; to: 0 360 0; dur: 3000; loop: true">
+                    <a-sphere 
+                        radius="0.12" 
+                        color="#ff1744"
+                        material="emissive: #ff69b4; emissiveIntensity: 0.6">
+                    </a-sphere>
+                </a-entity>
+                
+                <!-- Heart Particle System 2 -->
+                <a-entity 
+                    id="heart2"
+                    position="0.6 0.4 0.2"
+                    animation="property: position; to: 0.6 1.1 0.2; dur: 3500; loop: true; easing: easeInOutQuad"
+                    animation__rotation="property: rotation; to: 0 -360 0; dur: 3500; loop: true">
+                    <a-sphere 
+                        radius="0.1" 
+                        color="#ff5252"
+                        material="emissive: #ff69b4; emissiveIntensity: 0.5">
+                    </a-sphere>
+                </a-entity>
+                
+                <!-- Heart Particle System 3 -->
+                <a-entity 
+                    id="heart3"
+                    position="0 0.6 0.2"
+                    animation="property: position; to: 0 1.3 0.2; dur: 2800; loop: true; easing: easeInOutQuad"
+                    animation__rotation="property: rotation; to: 360 0 360; dur: 2800; loop: true">
+                    <a-sphere 
+                        radius="0.08" 
+                        color="#ff6f00"
+                        material="emissive: #ffb74d; emissiveIntensity: 0.7">
+                    </a-sphere>
+                </a-entity>
+                
+                <!-- Heart Particle System 4 -->
+                <a-entity 
+                    id="heart4"
+                    position="-0.4 0.3 0.2"
+                    animation="property: position; to: -0.4 1.0 0.2; dur: 3200; loop: true; easing: easeInOutQuad"
+                    animation__rotation="property: rotation; to: 0 180 360; dur: 3200; loop: true">
+                    <a-sphere 
+                        radius="0.11" 
+                        color="#ff69b4"
+                        material="emissive: #ff1744; emissiveIntensity: 0.6">
+                    </a-sphere>
+                </a-entity>
+                
+                <!-- Heart Particle System 5 -->
+                <a-entity 
+                    id="heart5"
+                    position="0.4 0.7 0.15"
+                    animation="property: position; to: 0.4 1.4 0.15; dur: 3000; loop: true; easing: easeInOutQuad"
+                    animation__rotation="property: rotation; to: -360 180 0; dur: 3000; loop: true">
+                    <a-sphere 
+                        radius="0.09" 
+                        color="#e91e63"
+                        material="emissive: #ff69b4; emissiveIntensity: 0.5">
+                    </a-sphere>
+                </a-entity>
+                
+            </a-entity>
+            
+        </a-scene>
+        
+        <!-- UI Overlay -->
+        <div class="ui-overlay">
+            <div class="header">
+                <h1>💕 Kỷ Niệm Của Chúng Mình 💕</h1>
+                <p>Hãy di chuyển camera vào ảnh của chúng ta để bắt đầu</p>
+            </div>
+            
+            <div class="status" id="status">Đang khởi tạo AR...</div>
+            
+            <div class="button-group">
+                <button class="start-btn" id="startBtn">🎬 Bắt Đầu Video</button>
+                <button class="info-btn" id="infoBtn">ℹ️ Hướng Dẫn</button>
+            </div>
+        </div>
+        
+        <!-- Info Modal -->
+        <div class="modal" id="infoModal">
+            <div class="modal-content">
+                <h2>📖 Hướng Dẫn Sử Dụng</h2>
+                <p><strong>Bước 1:</strong> In ra hoặc hiển thị ảnh kỷ niệm trên thiết bị khác (máy tính, tablet)</p>
+                <p><strong>Bước 2:</strong> Mở trang web này trên điện thoại với quyền truy cập camera</p>
+                <p><strong>Bước 3:</strong> Hướng camera vào ảnh kỷ niệm để kích hoạt hiệu ứng AR</p>
+                <p><strong>Bước 4:</strong> Nhấn "Bắt Đầu Video" để phát video kỷ niệm</p>
+                <p><strong>💡 Lưu ý:</strong> Nên sử dụng ảnh rõ nét, có nhiều chi tiết để camera dễ nhận diện</p>
+                <button class="close-btn" id="closeBtn">Đóng</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hidden Assets Container -->
+    <div style="display: none;">
+        <!-- Replace with your memory video URL -->
+        <video id="memoryVideoAsset" crossOrigin="anonymous" playsinline muted>
+            <!-- Video URL - sử dụng video Valentine được tạo -->
+            <source src="valentine-video.mp4" type="video/mp4">
+        </video>
+    </div>
+    
+    <script>
+        // Initialize AR status
+        const scene = document.getElementById('scene');
+        const startBtn = document.getElementById('startBtn');
+        const infoBtn = document.getElementById('infoBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const infoModal = document.getElementById('infoModal');
+        const statusText = document.getElementById('status');
+        const video = document.getElementById('memory-video');
+        
+        // Console logging & checks
+        console.log('=== Valentine AR Initialized ===');
+        console.log('Scene:', scene);
+        console.log('Video element:', document.querySelector('video#memoryVideoAsset'));
+        console.log('Video src:', document.querySelector('video#memoryVideoAsset')?.src || 'Not set');
+        console.log('Protocol:', window.location.protocol);
+        console.log('Hostname:', window.location.hostname);
+        
+        // Check HTTPS for production
+        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+            console.warn('⚠️ Warning: Một số trình duyệt yêu cầu HTTPS để truy cập camera. Hãy deploy lên HTTPS.');
+        }
+        
+        // Check CORS
+        const videoElement = document.querySelector('video#memoryVideoAsset');
+        if (videoElement) {
+            videoElement.addEventListener('error', (e) => {
+                console.error('❌ Video Load Error:', e);
+                console.log('Error code:', e.target.error?.code);
+                console.log('Error message:', e.target.error?.message);
+                statusText.textContent = '❌ Lỗi tải video. Kiểm tra console (F12)';
+            });
+            videoElement.addEventListener('loadstart', () => {
+                console.log('✅ Video loading...');
+            });
+            videoElement.addEventListener('canplay', () => {
+                console.log('✅ Video ready to play');
+            });
+        }
+        
+        // Status events
+        scene.addEventListener('mindar-image-loaded', () => {
+            console.log('✅ Mind-AR loaded successfully');
+            statusText.textContent = '✅ AR sẵn sàng! Hướng camera vào ảnh';
+            statusText.style.color = '#4CAF50';
+        });
+        
+        scene.addEventListener('mindar-image-error', (e) => {
+            console.error('❌ Mind-AR Error:', e);
+            statusText.textContent = '❌ Lỗi tải .mind file. Kiểm tra URL';
+            statusText.style.color = '#FF0000';
+        });
+        
+        scene.addEventListener('mindar-image-target-found', (e) => {
+            statusText.textContent = '🎯 Đã tìm thấy ảnh! Bạn có thể phát video';
+            statusText.style.color = '#FFD700';
+        });
+        
+        scene.addEventListener('mindar-image-target-lost', (e) => {
+            statusText.textContent = '👀 Hãy hướng camera lại ảnh';
+            statusText.style.color = '#FFA500';
+            // Pause video when target is lost
+            const videoElement = video.components.material.material.map.source;
+            if (videoElement) {
+                videoElement.pause();
+            }
+        });
+        
+        // Start Button Handler
+        startBtn.addEventListener('click', () => {
+            const videoElement = document.querySelector('video#memoryVideoAsset');
+            if (!videoElement) {
+                alert('❌ Lỗi: Không tìm thấy video element');
+                return;
+            }
+            
+            if (videoElement.src || videoElement.querySelector('source')) {
+                videoElement.muted = false;
+                const playPromise = videoElement.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        console.error('Playback error:', err);
+                        alert('❌ Không thể phát video. Lý do:\n' + err.message);
+                        videoElement.muted = true;
+                    });
+                }
+                
+                startBtn.textContent = '⏸️ Tạm Dừng';
+                startBtn.style.background = 'linear-gradient(135deg, #1976d2, #42a5f5)';
+            } else {
+                alert('❌ Lỗi: Không tìm thấy URL video');
+            }
+        });
+        
+        // Toggle play/pause
+        startBtn.addEventListener('click', function() {
+            const videoElement = document.querySelector('video#memoryVideoAsset');
+            if (videoElement) {
+                if (videoElement.paused) {
+                    videoElement.play();
+                    startBtn.textContent = '⏸️ Tạm Dừng';
+                    startBtn.style.background = 'linear-gradient(135deg, #1976d2, #42a5f5)';
+                } else {
+                    videoElement.pause();
+                    startBtn.textContent = '🎬 Bắt Đầu Video';
+                    startBtn.style.background = 'linear-gradient(135deg, #ff1744, #ff5252)';
+                }
+            }
+        });
+        
+        // Info Modal
+        infoBtn.addEventListener('click', () => {
+            infoModal.classList.add('active');
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            infoModal.classList.remove('active');
+        });
+        
+        infoModal.addEventListener('click', (e) => {
+            if (e.target === infoModal) {
+                infoModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
