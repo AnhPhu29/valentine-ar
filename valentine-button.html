@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💝 Có yêu tôi không? - Valentine 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFB3D9 0%, #FFC3E5 50%, #FFD4F0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient hearts */
+        .ambient-heart {
+            position: fixed;
+            font-size: 20px;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* Question Card */
+        .question-card {
+            background: white;
+            padding: 60px 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-card.hidden {
+            display: none;
+        }
+
+        h1 {
+            color: #FF1493;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.2);
+        }
+
+        .subtitle {
+            color: #FF69B4;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .buttons-container {
+            position: relative;
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        button {
+            padding: 18px 45px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        #yesBtn {
+            background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+            color: white;
+            animation: pulse 2s infinite;
+            z-index: 100;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        #yesBtn:hover {
+            background: linear-gradient(135deg, #FF0080 0%, #FF1493 100%);
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.5);
+        }
+
+        #noBtn {
+            background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
+            color: #666;
+            position: absolute;
+            transition: all 0.15s ease-out;
+            z-index: 50;
+        }
+
+        #noBtn:hover {
+            background: linear-gradient(135deg, #D0D0D0 0%, #A0A0A0 100%);
+        }
+
+        /* Celebration Screen */
+        .celebration {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: linear-gradient(135deg, #FFB3D9 0%, #FF69B4 50%, #FF1493 100%);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .celebration.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .celebration-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 1001;
+        }
+
+        .celebration h2 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            animation: bounceIn 1s ease-out;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .celebration p {
+            font-size: 1.8em;
+            animation: fadeInUp 1.2s ease-out 0.5s both;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        @keyframes bounceIn {
+            0% { 
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% { 
+                transform: scale(1.1);
+            }
+            100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Falling Hearts */
+        .heart {
+            position: fixed;
+            font-size: 30px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                opacity: 1;
+                transform: translateY(-10vh) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .question-card {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+
+            button {
+                padding: 15px 35px;
+                font-size: 1.1em;
+            }
+
+            .buttons-container {
+                min-height: 120px;
+                gap: 20px;
+            }
+
+            .celebration h2 {
+                font-size: 2.5em;
+            }
+
+            .celebration p {
+                font-size: 1.3em;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient floating hearts -->
+    <div class="ambient-heart" style="top: 10%; left: 10%;">💕</div>
+    <div class="ambient-heart" style="top: 20%; right: 15%; animation-delay: 2s;">💖</div>
+    <div class="ambient-heart" style="bottom: 15%; left: 20%; animation-delay: 4s;">💗</div>
+    <div class="ambient-heart" style="bottom: 25%; right: 10%; animation-delay: 6s;">💝</div>
+    <div class="ambient-heart" style="top: 40%; left: 5%; animation-delay: 3s;">💓</div>
+    <div class="ambient-heart" style="top: 60%; right: 5%; animation-delay: 5s;">💞</div>
+
+    <!-- Question Card -->
+    <div class="question-card" id="questionCard">
+        <h1>💝 Em có yêu anh không? 💝</h1>
+        <p class="subtitle">Hãy chọn câu trả lời của em nhé~</p>
+        
+        <div class="buttons-container" id="buttonsContainer">
+            <button id="yesBtn">Có ❤️</button>
+            <button id="noBtn">Không 💔</button>
+        </div>
+    </div>
+
+    <!-- Celebration Screen -->
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2>🎉 Yayyy! 🎉</h2>
+            <p>Anh biết mà! Yêu em nhiều nhiều lắm! 💕💕💕<br>
+            Em là món quà Valentine tuyệt vời nhất! 🎁✨</p>
+        </div>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const questionCard = document.getElementById('questionCard');
+        const celebration = document.getElementById('celebration');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+
+        let noBtnScale = 1;
+        let yesBtnScale = 1;
+        let escapeCount = 0;
+
+        // Make "No" button run away on hover
+        noBtn.addEventListener('mouseenter', () => {
+            escapeCount++;
+            moveNoButton();
+            
+            // Make "Yes" button bigger each time "No" runs away
+            yesBtnScale += 0.15;
+            yesBtn.style.transform = `scale(${yesBtnScale})`;
+            
+            // After 3 escapes, make "No" button smaller
+            if (escapeCount >= 3) {
+                noBtnScale -= 0.1;
+                noBtn.style.transform = `scale(${Math.max(noBtnScale, 0.5)})`;
+                noBtn.innerHTML = escapeCount === 3 ? 'Không... 😢' : 
+                                  escapeCount === 4 ? 'Ư... 😭' : 
+                                  escapeCount >= 5 ? '😰' : 'Không 💔';
+            }
+        });
+
+        // Move "No" button to random position
+        function moveNoButton() {
+            const container = buttonsContainer.getBoundingClientRect();
+            const card = questionCard.getBoundingClientRect();
+            
+            // Random position within the card
+            const maxX = container.width - noBtn.offsetWidth - 20;
+            const maxY = container.height - noBtn.offsetHeight - 20;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // "Yes" button celebration
+        yesBtn.addEventListener('click', () => {
+            questionCard.classList.add('hidden');
+            celebration.classList.add('active');
+            
+            // Create falling hearts
+            createFallingHearts(50);
+            
+            // Continue creating hearts every 500ms
+            const heartInterval = setInterval(() => {
+                createFallingHearts(10);
+            }, 500);
+            
+            // Stop after 5 seconds
+            setTimeout(() => {
+                clearInterval(heartInterval);
+            }, 5000);
+        });
+
+        // Create falling hearts
+        function createFallingHearts(count) {
+            const hearts = ['❤️', '💕', '💖', '💗', '💝', '💓', '💞', '💘'];
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                    heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    
+                    document.body.appendChild(heart);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 4000);
+                }, i * 50);
+            }
+        }
+
+        // Initialize "No" button position
+        noBtn.style.position = 'absolute';
+        moveNoButton();
+    </script>
+</body>
+</html>
