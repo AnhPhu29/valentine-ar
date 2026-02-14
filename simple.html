@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Valentine Video</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff1744 0%, #ff5252 100%);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        video {
+            max-width: 90%;
+            width: 640px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+        
+        button {
+            background: white;
+            color: #ff1744;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            margin: 10px;
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        .info {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 20px;
+        }
+        
+        .heart {
+            font-size: 50px;
+            animation: beat 1s infinite;
+        }
+        
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart">💕</div>
+    <h1>Valentine Video</h1>
+    
+    <video id="myVideo" controls loop>
+        <source src="valentine-video.mp4" type="video/mp4">
+        Trình duyệt không hỗ trợ video.
+    </video>
+    
+    <div>
+        <button onclick="playVideo()">▶️ Phát Video</button>
+        <button onclick="pauseVideo()">⏸️ Tạm Dừng</button>
+    </div>
+    
+    <div class="info">
+        <p>💕 Happy Valentine's Day! 💕</p>
+    </div>
+    
+    <script>
+        const video = document.getElementById('myVideo');
+        
+        function playVideo() {
+            video.play();
+        }
+        
+        function pauseVideo() {
+            video.pause();
+        }
+        
+        // Auto play on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                video.play().catch(err => {
+                    console.log('Auto-play blocked. Click play button!');
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>

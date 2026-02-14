@@ -338,10 +338,25 @@
         const statusText = document.getElementById('status');
         const video = document.getElementById('memory-video');
         
+        // Timeout loading
+        let loadTimeout = setTimeout(() => {
+            statusText.textContent = '⚠️ Load lâu? Thử tải lại trang (F5)';
+            statusText.style.color = '#FFA500';
+        }, 10000);
+        
         // AR loaded
         scene.addEventListener('mindar-image-loaded', () => {
+            clearTimeout(loadTimeout);
             statusText.textContent = '✅ Sẵn sàng! Hướng camera vào ảnh';
             statusText.style.color = '#4CAF50';
+        });
+        
+        // AR error
+        scene.addEventListener('arError', (e) => {
+            clearTimeout(loadTimeout);
+            statusText.textContent = '❌ Lỗi AR. Tải lại trang!';
+            statusText.style.color = '#FF0000';
+            console.error('AR Error:', e);
         });
         
         // Target found
