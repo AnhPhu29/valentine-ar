@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💌 Valentine Surprise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 50%, #ffd5e5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Container */
+        .container {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* Envelope (Phong thư) */
+        .envelope {
+            width: 300px;
+            height: 200px;
+            position: relative;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-body {
+            width: 100%;
+            height: 100%;
+            background: #ff6b9d;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+
+        .envelope-top {
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #ff8fb3;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top center;
+            transition: transform 0.6s ease;
+            z-index: 3;
+        }
+
+        .envelope.open .envelope-top {
+            transform: rotateX(180deg);
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            z-index: 5;
+            animation: beat 1.5s infinite;
+        }
+
+        @keyframes beat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        /* Letter (Lá thư) */
+        .letter {
+            width: 280px;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: all 0.6s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        .envelope.open .letter {
+            opacity: 1;
+            top: -50px;
+        }
+
+        .letter h1 {
+            color: #ff1744;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .letter p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .letter .signature {
+            text-align: right;
+            font-style: italic;
+            color: #ff1744;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        /* Click instruction */
+        .instruction {
+            margin-top: 30px;
+            color: #ff1744;
+            font-size: 16px;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .instruction.hide {
+            opacity: 0;
+        }
+
+        /* Hearts Rain (Mưa trái tim) */
+        .heart {
+            position: fixed;
+            font-size: 20px;
+            color: #ff1744;
+            animation: fall linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%;
+                opacity: 1;
+            }
+            100% {
+                top: 110%;
+                opacity: 0;
+            }
+        }
+
+        /* Card view (Sau khi mở) */
+        .card {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(255, 23, 68, 0.3);
+            animation: slideUp 0.6s ease;
+        }
+
+        .card.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .card h1 {
+            color: #ff1744;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .card p {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .card .signature {
+            text-align: right;
+            font-style: italic;
+            color: #ff1744;
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .envelope {
+                width: 250px;
+                height: 167px;
+            }
+
+            .envelope-top {
+                border-left: 125px solid transparent;
+                border-right: 125px solid transparent;
+                border-top: 83px solid #ff8fb3;
+            }
+
+            .letter {
+                width: 230px;
+                padding: 20px;
+            }
+
+            .letter h1 {
+                font-size: 20px;
+            }
+
+            .letter p {
+                font-size: 13px;
+            }
+
+            .card {
+                padding: 30px;
+                margin: 0 20px;
+            }
+
+            .card h1 {
+                font-size: 26px;
+            }
+
+            .card p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Envelope Section -->
+    <div class="container" id="envelopeContainer">
+        <div class="envelope" id="envelope">
+            <div class="envelope-body">
+                <div class="envelope-top"></div>
+                <div class="heart-seal">💌</div>
+                <div class="letter">
+                    <h1>Happy Valentine's Day! 💕</h1>
+                    <p>Anh/Em yêu thương,</p>
+                    <p>Hôm nay là ngày đặc biệt để em/anh nói với anh/em rằng...</p>
+                    <p>"Anh/Em là điều tuyệt vời nhất trong đời em/anh!"</p>
+                    <div class="signature">— Với tất cả tình yêu 💖</div>
+                </div>
+            </div>
+        </div>
+        <p class="instruction" id="instruction">👆 Click vào phong thư nhé!</p>
+    </div>
+
+    <!-- Card View (After opening) -->
+    <div class="card" id="card">
+        <h1>💕 Happy Valentine's Day! 💕</h1>
+        <p>
+            <strong>Gửi người em/anh yêu thương nhất,</strong>
+        </p>
+        <p>
+            Trong cuộc đời này, có rất nhiều điều đẹp đẽ, nhưng không gì đẹp đẽ bằng 
+            những khoảnh khắc bên cạnh anh/em. Mỗi ngày trôi qua, tình yêu của em/anh 
+            dành cho anh/em càng thêm sâu đậm.
+        </p>
+        <p>
+            Em/Anh muốn nói rằng: <strong>"Cảm ơn anh/em vì đã luôn ở bên em/anh, 
+            vì tất cả những nụ cười, những kỷ niệm tuyệt vời mà chúng ta đã cùng 
+            tạo nên."</strong>
+        </p>
+        <p>
+            Hôm nay và mãi mãi, em/anh sẽ luôn yêu anh/em! ❤️
+        </p>
+        <div class="signature">
+            — Từ người yêu anh/em nhất đời 💖<br>
+            14/02/2026
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const envelope = document.getElementById('envelope');
+        const instruction = document.getElementById('instruction');
+        const envelopeContainer = document.getElementById('envelopeContainer');
+        const card = document.getElementById('card');
+        
+        let isOpened = false;
+
+        // Click envelope to open
+        envelope.addEventListener('click', function() {
+            if (isOpened) return;
+            
+            // Open envelope
+            envelope.classList.add('open');
+            instruction.classList.add('hide');
+            isOpened = true;
+            
+            // Create hearts rain
+            createHeartsRain();
+            
+            // Show card after animation
+            setTimeout(() => {
+                envelopeContainer.style.display = 'none';
+                card.classList.add('show');
+            }, 1500);
+        });
+
+        // Create hearts rain effect
+        function createHeartsRain() {
+            const heartsCount = 50;
+            const heartSymbols = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+            
+            for (let i = 0; i < heartsCount; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    
+                    // Random position
+                    heart.style.left = Math.random() * 100 + '%';
+                    
+                    // Random animation duration
+                    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    
+                    // Random delay
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    
+                    // Random size
+                    const size = Math.random() * 20 + 15;
+                    heart.style.fontSize = size + 'px';
+                    
+                    document.body.appendChild(heart);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 6000);
+                }, i * 100);
+            }
+        }
+
+        // Create ambient floating hearts
+        function createAmbientHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = '💕';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 7000);
+            }, 3000);
+        }
+
+        // Start ambient hearts
+        createAmbientHearts();
+    </script>
+</body>
+</html>
