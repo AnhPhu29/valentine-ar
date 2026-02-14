@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💕 Kỷ Niệm Của Chúng Mình - AR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>💕 Valentine AR</title>
     
     <!-- A-Frame Library -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
@@ -59,14 +59,13 @@
         }
         
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-            animation: pulse 2s ease-in-out infinite;
+            font-size: 24px;
+            margin-bottom: 10px;
         }
         
         .header p {
-            font-size: 14px;
-            opacity: 0.9;
+            font-size: 13px;
+            opacity: 0.95;
         }
         
         .button-group {
@@ -89,29 +88,21 @@
         }
         
         .start-btn {
-            background: linear-gradient(135deg, #ff1744, #ff5252);
+            background: #ff1744;
             color: white;
-        }
-        
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 23, 68, 0.4);
         }
         
         .start-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.95);
+            background: #d32f2f;
         }
         
         .info-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
-            border: 2px solid white;
-            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            font-size: 11px;
             padding: 8px 15px;
-        }
-        
-        .info-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
         }
         
         .modal {
@@ -170,14 +161,9 @@
             opacity: 0.8;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
         @keyframes slideUp {
             from {
-                transform: translateY(50px);
+                transform: translateY(30px);
                 opacity: 0;
             }
             to {
@@ -309,11 +295,11 @@
         <!-- UI Overlay -->
         <div class="ui-overlay">
             <div class="header">
-                <h1>💕 Kỷ Niệm Của Chúng Mình 💕</h1>
-                <p>Hãy di chuyển camera vào ảnh của chúng ta để bắt đầu</p>
+                <h1>💕 Valentine AR 💕</h1>
+                <p>Hướng camera vào ảnh của chúng ta</p>
             </div>
             
-            <div class="status" id="status">Đang khởi tạo AR...</div>
+            <div class="status" id="status">⏳ Đang tải...</div>
             
             <div class="button-group">
                 <button class="start-btn" id="startBtn">🎬 Bắt Đầu Video</button>
@@ -324,28 +310,26 @@
         <!-- Info Modal -->
         <div class="modal" id="infoModal">
             <div class="modal-content">
-                <h2>📖 Hướng Dẫn Sử Dụng</h2>
-                <p><strong>Bước 1:</strong> In ra hoặc hiển thị ảnh kỷ niệm trên thiết bị khác (máy tính, tablet)</p>
-                <p><strong>Bước 2:</strong> Mở trang web này trên điện thoại với quyền truy cập camera</p>
-                <p><strong>Bước 3:</strong> Hướng camera vào ảnh kỷ niệm để kích hoạt hiệu ứng AR</p>
-                <p><strong>Bước 4:</strong> Nhấn "Bắt Đầu Video" để phát video kỷ niệm</p>
-                <p><strong>💡 Lưu ý:</strong> Nên sử dụng ảnh rõ nét, có nhiều chi tiết để camera dễ nhận diện</p>
+                <h2>📖 Hướng Dẫn</h2>
+                <p><strong>Bước 1:</strong> Mở trang web này trên điện thoại</p>
+                <p><strong>Bước 2:</strong> Cho phép quyền camera khi được hỏi</p>
+                <p><strong>Bước 3:</strong> Hướng camera vào ảnh của chúng ta</p>
+                <p><strong>Bước 4:</strong> Nhấn "Bắt Đầu Video" để phát</p>
+                <p><strong>💡 Lưu ý:</strong> Ảnh cần rõ nét, ánh sáng đủ</p>
                 <button class="close-btn" id="closeBtn">Đóng</button>
             </div>
         </div>
     </div>
     
-    <!-- Hidden Assets Container -->
+    <!-- Video Asset -->
     <div style="display: none;">
-        <!-- Replace with your memory video URL -->
-        <video id="memoryVideoAsset" crossOrigin="anonymous" playsinline muted>
-            <!-- Video URL - sử dụng video Valentine được tạo -->
+        <video id="memoryVideoAsset" crossOrigin="anonymous" playsinline muted loop>
             <source src="valentine-video.mp4" type="video/mp4">
         </video>
     </div>
     
     <script>
-        // Initialize AR status
+        // Elements
         const scene = document.getElementById('scene');
         const startBtn = document.getElementById('startBtn');
         const infoBtn = document.getElementById('infoBtn');
@@ -354,120 +338,62 @@
         const statusText = document.getElementById('status');
         const video = document.getElementById('memory-video');
         
-        // Console logging & checks
-        console.log('=== Valentine AR Initialized ===');
-        console.log('Scene:', scene);
-        console.log('Video element:', document.querySelector('video#memoryVideoAsset'));
-        console.log('Video src:', document.querySelector('video#memoryVideoAsset')?.src || 'Not set');
-        console.log('Protocol:', window.location.protocol);
-        console.log('Hostname:', window.location.hostname);
-        
-        // Check HTTPS for production
-        if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-            console.warn('⚠️ Warning: Một số trình duyệt yêu cầu HTTPS để truy cập camera. Hãy deploy lên HTTPS.');
-        }
-        
-        // Check CORS
-        const videoElement = document.querySelector('video#memoryVideoAsset');
-        if (videoElement) {
-            videoElement.addEventListener('error', (e) => {
-                console.error('❌ Video Load Error:', e);
-                console.log('Error code:', e.target.error?.code);
-                console.log('Error message:', e.target.error?.message);
-                statusText.textContent = '❌ Lỗi tải video. Kiểm tra console (F12)';
-            });
-            videoElement.addEventListener('loadstart', () => {
-                console.log('✅ Video loading...');
-            });
-            videoElement.addEventListener('canplay', () => {
-                console.log('✅ Video ready to play');
-            });
-        }
-        
-        // Status events
+        // AR loaded
         scene.addEventListener('mindar-image-loaded', () => {
-            console.log('✅ Mind-AR loaded successfully');
-            statusText.textContent = '✅ AR sẵn sàng! Hướng camera vào ảnh';
+            statusText.textContent = '✅ Sẵn sàng! Hướng camera vào ảnh';
             statusText.style.color = '#4CAF50';
         });
         
-        scene.addEventListener('mindar-image-error', (e) => {
-            console.error('❌ Mind-AR Error:', e);
-            statusText.textContent = '❌ Lỗi tải .mind file. Kiểm tra URL';
-            statusText.style.color = '#FF0000';
-        });
-        
-        scene.addEventListener('mindar-image-target-found', (e) => {
-            statusText.textContent = '🎯 Đã tìm thấy ảnh! Bạn có thể phát video';
+        // Target found
+        scene.addEventListener('mindar-image-target-found', () => {
+            statusText.textContent = '🎯 Tìm thấy ảnh! Nhấn nút để phát video';
             statusText.style.color = '#FFD700';
         });
         
-        scene.addEventListener('mindar-image-target-lost', (e) => {
-            statusText.textContent = '👀 Hãy hướng camera lại ảnh';
+        // Target lost
+        scene.addEventListener('mindar-image-target-lost', () => {
+            statusText.textContent = '👀 Hướng camera lại ảnh nhé';
             statusText.style.color = '#FFA500';
-            // Pause video when target is lost
-            const videoElement = video.components.material.material.map.source;
-            if (videoElement) {
-                videoElement.pause();
-            }
         });
         
-        // Start Button Handler
+        scene.addEventListener('mindar-image-target-found', () => {
+            statusText.textContent = '🎯 Tìm thấy ảnh! Nhấn nút để phát video';
+            statusText.style.color = '#FFD700';
+        });
+        
+        // Target lost
+        scene.addEventListener('mindar-image-target-lost', () => {
+            statusText.textContent = '👀 Hướng camera lại ảnh nhé';
+            statusText.style.color = '#FFA500';
+        });
+        
+        // Play/Pause video
+        let isPlaying = false;
         startBtn.addEventListener('click', () => {
-            const videoElement = document.querySelector('video#memoryVideoAsset');
-            if (!videoElement) {
-                alert('❌ Lỗi: Không tìm thấy video element');
-                return;
-            }
+            const videoEl = document.querySelector('video#memoryVideoAsset');
+            if (!videoEl) return;
             
-            if (videoElement.src || videoElement.querySelector('source')) {
-                videoElement.muted = false;
-                const playPromise = videoElement.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.catch(err => {
-                        console.error('Playback error:', err);
-                        alert('❌ Không thể phát video. Lý do:\n' + err.message);
-                        videoElement.muted = true;
-                    });
-                }
-                
-                startBtn.textContent = '⏸️ Tạm Dừng';
-                startBtn.style.background = 'linear-gradient(135deg, #1976d2, #42a5f5)';
+            if (isPlaying) {
+                videoEl.pause();
+                startBtn.textContent = '🎬 Bắt Đầu Video';
+                startBtn.style.background = '#ff1744';
+                isPlaying = false;
             } else {
-                alert('❌ Lỗi: Không tìm thấy URL video');
+                videoEl.muted = false;
+                videoEl.play().catch(err => {
+                    alert('Không thể phát video. Thử lại!');
+                });
+                startBtn.textContent = '⏸️ Tạm Dừng';
+                startBtn.style.background = '#1976d2';
+                isPlaying = true;
             }
         });
         
-        // Toggle play/pause
-        startBtn.addEventListener('click', function() {
-            const videoElement = document.querySelector('video#memoryVideoAsset');
-            if (videoElement) {
-                if (videoElement.paused) {
-                    videoElement.play();
-                    startBtn.textContent = '⏸️ Tạm Dừng';
-                    startBtn.style.background = 'linear-gradient(135deg, #1976d2, #42a5f5)';
-                } else {
-                    videoElement.pause();
-                    startBtn.textContent = '🎬 Bắt Đầu Video';
-                    startBtn.style.background = 'linear-gradient(135deg, #ff1744, #ff5252)';
-                }
-            }
-        });
-        
-        // Info Modal
-        infoBtn.addEventListener('click', () => {
-            infoModal.classList.add('active');
-        });
-        
-        closeBtn.addEventListener('click', () => {
-            infoModal.classList.remove('active');
-        });
-        
+        // Modal info
+        infoBtn.addEventListener('click', () => infoModal.classList.add('active'));
+        closeBtn.addEventListener('click', () => infoModal.classList.remove('active'));
         infoModal.addEventListener('click', (e) => {
-            if (e.target === infoModal) {
-                infoModal.classList.remove('active');
-            }
+            if (e.target === infoModal) infoModal.classList.remove('active');
         });
     </script>
 </body>
